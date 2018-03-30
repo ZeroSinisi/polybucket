@@ -2,7 +2,7 @@
   "name": "shitbucket",
   "version": "1.0.0",
   "description": "A shitty git client",
-  "main": "index.js",
+  "main": "server/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/ZeroSinisi/shitbucket/issues"
   },
-  "homepage": "https://github.com/ZeroSinisi/shitbucket#readme"
+  "homepage": "https://github.com/ZeroSinisi/shitbucket#readme",
+  "dependencies": {
+    "simple-git": "^1.92.0"
+  }
 }
