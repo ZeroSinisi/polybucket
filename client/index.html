@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <style>
         button {
@@ -7,15 +8,28 @@
         }
     </style>
 </head>
+
 <body>
     <button id="pullButton">Click Me</button>
+    <button id="statusButton" onclick="_handleStatusClicked()">Git Status</button>
     <script>
-        const template = document.querySelector("#template");
-        const button = document.querySelector("#pullButton");
-        button.addEventListener("click", () => {
+        const pullBtn = document.querySelector("#pullButton");
+        const statusBtn = document.querySelector("#statusButton");
+        pullBtn.addEventListener("click", () => {
             console.log("Clicked");
         });
+
+        function _handleStatusClicked() {
+            console.log("Getting status");
+            let request = new XMLHttpRequest();
+            request.open("GET", "http://127.0.0.1:8081/status", true);
+            request.addEventListener("load", () => {
+                response = JSON.parse(request.response);
+                console.log(response);
+            })
+            request.send();
+        }
     </script>
 </body>
-</html>
 
+</html>
