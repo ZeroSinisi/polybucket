@@ -12,6 +12,12 @@ async function gitStatus() {
     });
 }
 
+async function gitClone(repoPath, localPath, options, then) {
+    return new Promise(resolve => {
+        git.clone(repoPath, localPath, options, then);
+    });
+}
+
 const server = http.createServer((req, res) => {
     res.statusCode = 200;
     res.setHeader("Content-Type", "text/plain");
