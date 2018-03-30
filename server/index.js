@@ -20,12 +20,12 @@ async function gitClone(repoPath, localPath, options, then) {
 
 function handleStatus(req, res) {
     gitStatus().then(status => {
-        res.statusCode = 400;
+        res.statusCode = 200;
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.end(JSON.stringify(status));
     }, error => {
         console.log(error);
-    })
+    });
 }
 
 function handleGet(req, res) {
