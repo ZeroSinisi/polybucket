@@ -10,16 +10,24 @@
 </head>
 
 <body>
-    <button id="pullButton">Click Me</button>
+    <button id="pullButton" onClick="_handlePullClicked()">Git Pull</button>
     <button id="statusButton" onclick="_handleStatusClicked()">Git Status</button>
     <ul id="modifiedItems"></ul>
     <script>
         const pullBtn = document.querySelector("#pullButton");
         const statusBtn = document.querySelector("#statusButton");
         const modifiedItems = document.querySelector("#modifiedItems");
-        pullBtn.addEventListener("click", () => {
-            console.log("Clicked");
-        });
+
+        function _handlePullClicked() {
+            console.log("Pulling");
+            let request = new XMLHttpRequest();
+            request.open("GET", "http://127.0.0.1:8081/pull?remote=origin&branch=master", true);
+            request.addEventListener("load", () => {
+                response = JSON.parse(request.response);
+                console.log(response);
+            });
+            request.send();
+        }
 
         function _handleStatusClicked() {
             console.log("Getting status");
