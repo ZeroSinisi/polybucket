@@ -12,6 +12,14 @@ async function gitStatus() {
     });
 }
 
+async function gitPull(query) {
+    return new Promise(resolve => {
+        git.pull(query.remote, query.branch, query.options, (error, info) => {
+            resolve(info);
+        });
+    });
+}
+
 async function gitPush() {
 
 }
@@ -28,8 +36,8 @@ function handleStatus(req, res) {
 
 function handlePull(req, res) {
     const query = require('url').parse(req.url, true).query;
-    gitPush(query).then(status => {
-        rest.statusCode = 200;
+    gitPull(query).then(status => {
+        res.statusCode = 200;
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.end(JSON.stringify(status));
     }, error => {
