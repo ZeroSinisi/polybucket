@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Create a new Repository</title>
+    <link rel="import" href="restConstants.html">
+    <link rel="import" href="endpoint.html">
+    <style>
+        .selector {
+            margin-bottom: 10px;
+        }
+
+        .inputText {
+            margin-right: 20px;
+            float: left;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="selector">
+        <div class="inputText">Repository name: </div>
+        <input id="nameText"></input>
+    </div>
+    <div class="selector">
+        <div class="inputText">Enter a local directory: </div>
+        <input id="localPathText"></input>
+    </div>
+    <div class="selector">
+        <div class="inputText">Enter a remote git path: </div>
+        <input id="remotePathText"></input>
+    </div>
+    <button id="addNewBtn" onclick="_handleAddNewRepo()">Add new Repository</button>
+    <script>
+        const nameText = document.querySelector("#nameText");
+        const localPathText = document.querySelector("#localPathText");
+        const remotePathText = document.querySelector("#remotePathText");
+
+        function _handleAddNewRepo() {
+            console.log("Adding new repo");
+            let endpoint = new Endpoint(RestConstants.NEW_REPO)
+                .setQueryParam("name", nameText.value)
+                .setQueryParam("localUrl", localPathText.value)
+                .setQueryParam("remoteUrl", remotePathText.value)
+                .post();
+            endpoint.then(response => {
+                console.log(response);
+            })
+        }
+    </script>
+</body>
+
+</html>

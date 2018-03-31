@@ -3,7 +3,7 @@
 
 <head>
     <title>A Shitty Git Client</title>
-    <script src="js/restConstants.js"></script>
+    <link rel="import" href="restConstants.html">
     <style>
         button {
             margin-top: 20px;
@@ -15,6 +15,7 @@
     <button id="pullButton" onClick="_handlePullClicked()">Git Pull</button>
     <button id="fetchButton" onClick="_handleFetchClicked()">Git Fetch</button>
     <button id="statusButton" onclick="_handleStatusClicked()">Git Status</button>
+    <button id="newRepoBtn" onclick="_handleNewRepoClicked()">New Repository</button>
     <ul id="modifiedItems"></ul>
     <script>
         const pullBtn = document.querySelector("#pullButton");
@@ -59,6 +60,10 @@
                 });
             })
             request.send();
+        }
+
+        function _handleNewRepoClicked() {
+            window.location.href = window.location.href + "newRepo";
         }
     </script>
 </body>
