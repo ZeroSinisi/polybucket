@@ -2,6 +2,8 @@
 <html lang="en">
 
 <head>
+    <title>A Shitty Git Client</title>
+    <script src="js/restConstants.js"></script>
     <style>
         button {
             margin-top: 20px;
@@ -10,21 +12,41 @@
 </head>
 
 <body>
-    <button id="pullButton">Click Me</button>
+    <button id="pullButton" onClick="_handlePullClicked()">Git Pull</button>
+    <button id="fetchButton" onClick="_handleFetchClicked()">Git Fetch</button>
     <button id="statusButton" onclick="_handleStatusClicked()">Git Status</button>
     <ul id="modifiedItems"></ul>
     <script>
         const pullBtn = document.querySelector("#pullButton");
         const statusBtn = document.querySelector("#statusButton");
         const modifiedItems = document.querySelector("#modifiedItems");
-        pullBtn.addEventListener("click", () => {
-            console.log("Clicked");
-        });
+
+        function _handlePullClicked() {
+            console.log("Pulling");
+            let request = new XMLHttpRequest();
+            request.open("GET", RestConstants.GET_PULL + "?remote=origin&branch=master", true);
+            request.addEventListener("load", () => {
+                response = JSON.parse(request.response);
+                console.log(response);
+            });
+            request.send();
+        }
+
+        function _handleFetchClicked() {
+            console.log("Fetching");
+            let request = new XMLHttpRequest();
+            request.open("GET", RestConstants.GET_FETCH + "?remote=origin&branch=master", true);
+            request.addEventListener("load", () => {
+                response = JSON.parse(request.response);
+                console.log(response);
+            });
+            request.send();
+        }
 
         function _handleStatusClicked() {
             console.log("Getting status");
             let request = new XMLHttpRequest();
-            request.open("GET", "http://127.0.0.1:8081/status", true);
+            request.open("GET", RestConstants.GET_STATUS, true);
             request.addEventListener("load", () => {
                 response = JSON.parse(request.response);
                 Array.from(modifiedItems.children).forEach(child => {
