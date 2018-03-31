@@ -20,6 +20,14 @@ async function gitPull(query) {
     });
 }
 
+async function gitFetch(query) {
+    return new Promise(resolve => {
+        git.fetch(query.remote, query.branch, (error, info) => {
+            resolve(info);
+        });
+    })
+}
+
 async function gitPush() {
 
 }
@@ -45,6 +53,17 @@ function handlePull(req, res) {
     });
 }
 
+function handleFetch(req, res) {
+    const query = require('url').parse(req.url, true).query;
+    gitFetch(query).then(status => {
+        res.statusCode = 200;
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.end(JSON.stringify(status));
+    }, error => {
+        console.log(error);
+    });
+}
+
 function handlePush(req, res) {
     console.log(req);
     console.log(res);
@@ -56,7 +75,12 @@ function handleGet(req, res) {
             handleStatus(req, res);
             break;
         default:
-            handlePull(req, res);
+            if (req.url.includes("/pull")) {
+                handlePull(req, res);
+            }
+            else if (req.url.includes("/fetch")) {
+                handleFetch(req, res);
+            }
             break;
     }
 }

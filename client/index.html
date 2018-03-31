@@ -11,6 +11,7 @@
 
 <body>
     <button id="pullButton" onClick="_handlePullClicked()">Git Pull</button>
+    <button id="fetchButton" onClick="_handleFetchClicked()">Git Fetch</button>
     <button id="statusButton" onclick="_handleStatusClicked()">Git Status</button>
     <ul id="modifiedItems"></ul>
     <script>
@@ -22,6 +23,17 @@
             console.log("Pulling");
             let request = new XMLHttpRequest();
             request.open("GET", "http://127.0.0.1:8081/pull?remote=origin&branch=master", true);
+            request.addEventListener("load", () => {
+                response = JSON.parse(request.response);
+                console.log(response);
+            });
+            request.send();
+        }
+
+        function _handleFetchClicked() {
+            console.log("Fetching");
+            let request = new XMLHttpRequest();
+            request.open("GET", "http://127.0.0.1:8081/fetch?remote=origin&branch=master", true);
             request.addEventListener("load", () => {
                 response = JSON.parse(request.response);
                 console.log(response);
