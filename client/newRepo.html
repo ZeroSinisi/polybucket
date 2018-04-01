@@ -3,8 +3,8 @@
 
 <head>
     <title>Create a new Repository</title>
-    <script src="restConstants.js"></script>
-    <script src="endpoint.js"></script>
+    <script src="js/restConstants.js"></script>
+    <script src="js/endpoint.js"></script>
     <style>
         .selector {
             margin-bottom: 10px;
@@ -41,7 +41,7 @@
             let endpoint = new Endpoint(RestConstants.NEW_REPO)
                 .setQueryParam("name", nameText.value)
                 .setQueryParam("localUrl", localPathText.value)
-                .setQueryParam("remoteUrl", remotePathText.value)
+                // .setQueryParam("remoteUrl", remotePathText.value)
                 .post();
             endpoint.then(response => {
                 console.log(response);

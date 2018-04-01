@@ -1,8 +1,9 @@
 class Branches {
     constructor(git) {
         this.git = git;
-        this.local = null;
-        this.remote = null;
+        this.local = {};
+        this.remote = {};
+        this.summary = {};
     }
 
     getLocalBranches() {
@@ -13,26 +14,23 @@ class Branches {
         return this.remote;
     }
 
-    updateLocalBranches() {
+    updateBranches() {
         return new Promise((resolve, reject) => {
-            this.git.branchLocal((error, local) => {
+            this.git.branch((error, summary) => {
                 if (error) {
                     reject(error);
                 }
-                this.local = local;
-                resolve(this.local);
-            })
-        });
-    }
-
-    updateRemoteBranches() {
-        return new Promise((resolve, reject) => {
-            this.git.branch([], (error, remote) => {
-                if (error) {
-                    reject(error);
-                }
-                this.remote = remote;
-                resolve(remote);
+                this.local = {};
+                this.remote = {};
+                summary.all.forEach(branch => {
+                    if (branch.split("/")[0] === "remotes") {
+                        this.remote[branch] = summary.branches[branch];
+                    } else {
+                        this.local[branch] = summary.branches[branch];
+                    }
+                })
+                this.summary = summary;
+                resolve(summary);
             });
         });
     }

@@ -97,6 +97,8 @@ function handleNewRepo(req, res) {
     let repo = new Repository(query.name, query.localUrl);
     repo.init().then(repo => {
         respondToClient(res, JSON.stringify(repo));
+    }, error => {
+        console.log(error);
     })
 }
 

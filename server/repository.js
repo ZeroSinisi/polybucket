@@ -8,17 +8,9 @@ class Repository {
 
     init() {
         return new Promise((resolve, reject) => {
-            this.git.fetch((error, data) => {
-                if (error) {
-                    reject(error);
-                }
-                console.log(data);
-                this.branches.updateLocalBranches().then(() => {
-                    this.branches.updateRemoteBranches().then(() => {
-                        resolve(this);
-                    });
-                });
-            })
+            this.branches.updateBranches().then(() => {
+                resolve(this);
+            });
         });
     }
 }
