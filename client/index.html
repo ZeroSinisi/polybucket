@@ -4,6 +4,7 @@
 <head>
     <title>A Shitty Git Client</title>
     <script src="js/restConstants.js"></script>
+    <script src="js/endpoint.js"></script>
     <style>
         button {
             margin-top: 20px;
@@ -12,55 +13,20 @@
 </head>
 
 <body>
-    <button id="pullButton" onClick="_handlePullClicked()">Git Pull</button>
-    <button id="fetchButton" onClick="_handleFetchClicked()">Git Fetch</button>
-    <button id="statusButton" onclick="_handleStatusClicked()">Git Status</button>
     <button id="newRepoBtn" onclick="_handleNewRepoClicked()">New Repository</button>
-    <ul id="modifiedItems"></ul>
+    <ul id="repoList"></ul>
     <script>
-        const pullBtn = document.querySelector("#pullButton");
-        const statusBtn = document.querySelector("#statusButton");
-        const modifiedItems = document.querySelector("#modifiedItems");
+        const repoList = document.querySelector("#repoList");
 
-        function _handlePullClicked() {
-            console.log("Pulling");
-            let request = new XMLHttpRequest();
-            request.open("GET", RestConstants.GET_PULL + "?remote=origin&branch=master", true);
-            request.addEventListener("load", () => {
-                response = JSON.parse(request.response);
-                console.log(response);
-            });
-            request.send();
-        }
-
-        function _handleFetchClicked() {
-            console.log("Fetching");
-            let request = new XMLHttpRequest();
-            request.open("GET", RestConstants.GET_FETCH + "?remote=origin&branch=master", true);
-            request.addEventListener("load", () => {
-                response = JSON.parse(request.response);
-                console.log(response);
-            });
-            request.send();
-        }
-
-        function _handleStatusClicked() {
-            console.log("Getting status");
-            let request = new XMLHttpRequest();
-            request.open("GET", RestConstants.GET_STATUS, true);
-            request.addEventListener("load", () => {
-                response = JSON.parse(request.response);
-                Array.from(modifiedItems.children).forEach(child => {
-                    modifiedItems.removeChild(child);
-                });
-                response.modified.forEach(text => {
-                    let listItem = document.createElement("li");
-                    listItem.innerText = text;
-                    modifiedItems.appendChild(listItem);
-                });
+        let repos = {};
+        let endpoint = new Endpoint(RestConstants.LOAD_REPO).get();
+        endpoint.then(repos => {
+            Object.keys(repos).forEach(repo => {
+                let listItem = document.createElement("li");
+                listItem.innerText = repo;
+                repoList.appendChild(listItem);
             })
-            request.send();
-        }
+        });
 
         function _handleNewRepoClicked() {
             window.location.href = window.location.href + "newRepo";

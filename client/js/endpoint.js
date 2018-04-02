@@ -14,7 +14,7 @@ class Endpoint {
     get() {
         let queryString = this._createQueryString();
         this.request.open("GET", this.url + queryString, true);
-        return _constructPromise(this.request);
+        return this._constructPromise();
     }
 
     post() {

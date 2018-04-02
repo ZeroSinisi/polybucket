@@ -4,6 +4,7 @@ const http = require("http");
 const URL = require("url");
 const Branches = require("./branches.js")
 const Repository = require("./repository.js");
+const Utils = require("./utils.js");
 
 const hostname = "127.0.0.1";
 const port = "8081";
@@ -95,8 +96,22 @@ function handleBranch(req, res) {
 function handleNewRepo(req, res) {
     const query = URL.parse(req.url, true).query;
     let repo = new Repository(query.name, query.localUrl);
+    Utils.saveRepository(repo);
     repo.init().then(repo => {
         respondToClient(res, JSON.stringify(repo));
+    }, error => {
+        console.log(error);
+    })
+}
+
+function handleLoadRepo(req, res) {
+    let repos = Utils.loadRepositories();
+    let promises = [];
+    Object.keys(repos).forEach(repo => {
+        promises.push(repos[repo].init());
+    })
+    Promise.all(promises).then(() => {
+        respondToClient(res, JSON.stringify(repos));
     }, error => {
         console.log(error);
     })
@@ -108,7 +123,7 @@ function handleRepo(req, res, url) {
             handleNewRepo(req, res);
             break;
         case "load":
-
+            handleLoadRepo(req, res);
             break;
     }
 }
@@ -127,13 +142,16 @@ function handleGet(req, res, url) {
         case "branch":
             handleBranch(req, res);
             break;
+        case "repo":
+            handleRepo(req, res, url);
+            break;
     }
 }
 
 function handlePost(req, res, url) {
     switch (url.pathname.split("/")[1]) {
         case "push":
-            handlePush(req, res);
+            handlePush(req, res, url);
             break;
         case "repo":
             handleRepo(req, res, url);
