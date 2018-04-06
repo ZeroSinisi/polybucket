@@ -1,7 +1,7 @@
 class Endpoint {
     constructor(url) {
         this.url = url;
-        this.request = new XMLHttpRequest();
+        this.request = null
         this.queryParams = {};
         return this;
     }
@@ -12,27 +12,21 @@ class Endpoint {
     }
 
     get() {
-        let queryString = this._createQueryString();
-        this.request.open("GET", this.url + queryString, true);
-        return this._constructPromise();
+        this.request = new Request(this.url + this._createQueryString());
+        return fetch(this.request, {
+            method: "GET"
+        }).then(response => {
+            return response.json();
+        });
     }
 
     post() {
-        let queryString = this._createQueryString();
-        this.request.open("POST", this.url + queryString, true);
-        return this._constructPromise();
-    }
-
-    _constructPromise() {
-        let promiseResolver = null;
-        let promise = new Promise(resolve => {
-            promiseResolver = resolve;
+        this.request = new Request(this.url + this._createQueryString());
+        return fetch(this.request, {
+            method: "POST"
+        }).then(response => {
+            return response.json();
         });
-        this.request.addEventListener("load", () => {
-            promiseResolver(JSON.parse(this.request.response));
-        });
-        this.request.send();
-        return promise;
     }
 
     _createQueryString() {

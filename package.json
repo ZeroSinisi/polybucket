@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/ZeroSinisi/shitbucket#readme",
   "dependencies": {
+    "@polymer/iron-list": "^3.0.0-pre.1",
+    "@polymer/polymer": "^3.0.0-pre.12",
     "simple-git": "^1.92.0"
   }
 }

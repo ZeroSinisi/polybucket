@@ -4,6 +4,7 @@
 <head>
     <title>A Shitty Git Client</title>
     <script src="js/restConstants.js"></script>
+    <script src="js/endpoint.js"></script>
     <style>
         button {
             margin-top: 20px;
@@ -45,22 +46,19 @@
         }
 
         function _handleStatusClicked() {
-            console.log("Getting status");
-            let request = new XMLHttpRequest();
-            request.open("GET", RestConstants.GET_STATUS, true);
-            request.addEventListener("load", () => {
-                response = JSON.parse(request.response);
+            new Endpoint(RestConstants.GET_STATUS).get().then(json => {
                 Array.from(modifiedItems.children).forEach(child => {
                     modifiedItems.removeChild(child);
                 });
-                response.modified.forEach(text => {
+                json.modified.forEach(text => {
                     let listItem = document.createElement("li");
                     listItem.innerText = text;
                     modifiedItems.appendChild(listItem);
                 });
-            })
-            request.send();
+            });
         }
+
+
 
         function _handleNewRepoClicked() {
             window.location.href = window.location.href + "newRepo";
